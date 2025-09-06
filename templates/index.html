@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluar Riesgo de Diabetes</title>
+</head>
+<body>
+    <h1>Formulario: Evaluación de Riesgo de DM (PRE)</h1>
+    <form method="post" action="/predict">
+        <label>Ex fumador: <input type="number" step="any" name="ex_fum" required></label><br>
+        <label>Consumo alcohol: <input type="number" step="any" name="consum_alcoh" required></label><br>
+        <label>Consumo alcohol 30 días: <input type="number" step="any" name="consum_alcoh_30" required></label><br>
+        <label>Nivel actividad semanal: <input type="number" step="any" name="niveldeactividadesemanal" required></label><br>
+        <label>Actividad física FRISK: <input type="number" step="any" name="act_fis_frisk" required></label><br>
+        <label>Dieta FRISK: <input type="number" step="any" name="diet_frisk" required></label><br>
+        <label>Medicación HTA FR: <input type="number" step="any" name="med_hta_fr" required></label><br>
+        <label>Glucosa alta: <input type="number" step="any" name="glu_alta" required></label><br>
+        <label>Pariente DM: <input type="number" step="any" name="parien_dm" required></label><br>
+        <label>Edad: <input type="number" step="any" name="edad" required></label><br>
+        <label>METS: <input type="number" step="any" name="mets" required></label><br>
+        <label>Sedentarismo: <input type="number" step="any" name="sedentarismo" required></label><br>
+        <label>Talla: <input type="number" step="any" name="talla" required></label><br>
+        <label>Peso: <input type="number" step="any" name="peso" required></label><br>
+        <label>IMC: <input type="number" step="any" name="imc" required></label><br>
+        <label>MME: <input type="number" step="any" name="mme" required></label><br>
+        <button type="submit">Evaluar</button>
+    </form>
+</body>
+</html>

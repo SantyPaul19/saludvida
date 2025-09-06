@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Histórico de Evaluaciones</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #f3f3f3; position: sticky; top: 0; }
+    .badge { padding: 4px 8px; border-radius: 4px; color: #fff; }
+    .ok { background: #2e7d32; }
+    .risk { background: #c62828; }
+    .topbar a { margin-right: 12px; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="/">➤ Nuevo cálculo</a>
+    <a href="/history">⟲ Refrescar</a>
+  </div>
+
+  <h1>Histórico de evaluaciones</h1>
+  <p>Umbral de riesgo: <strong>{{ threshold }}</strong></p>
+
+  <canvas id="line" width="600" height="240"></canvas>
+
+  <script>
+    const labels = {{ chart_labels | tojson }};
+    const dataValues = {{ chart_values | tojson }};
+    const threshold = {{ threshold | tojson }};
+
+    const ctx = document.getElementById('line').getContext('2d');
+    const lineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Probabilidad de riesgo',
+            data: dataValues,
+            fill: false
+          },
+          {
+            label: 'Umbral',
+            data: labels.map(_ => threshold),
+            borderDash: [6,6],
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        stacked: false,
+        scales: {
+          y: { beginAtZero: true, max: 1 },
+          x: { ticks: { autoSkip: true, maxTicksLimit: 12 } }
+        }
+      }
+    });
+  </script>
+
+  <h2>Registros</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha ingreso</th>
+        <th>Edad</th>
+        <th>Peso</th>
+        <th>IMC</th>
+        <th>Probabilidad</th>
+        <th>Clasificación</th>
+        <th>Fecha predicción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.created_at }}</td>
+        <td>{{ r.edad }}</td>
+        <td>{{ r.peso }}</td>
+        <td>{{ r.imc }}</td>
+        <td>{{ r.proba if r.proba is not none else '-' }}</td>
+        <td>
+          {% if r.proba is not none and r.proba >= threshold %}
+            <span class="badge risk">RIESGOSO</span>
+          {% else %}
+            <span class="badge ok">NO RIESGOSO</span>
+          {% endif %}
+        </td>
+        <td>{{ r.predicted_at if r.predicted_at else '-' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
