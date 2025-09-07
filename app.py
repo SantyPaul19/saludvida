@@ -171,3 +171,18 @@ def export_csv():
         for row in res:
             writer.writerow([row[0], row[1], row[2], row[3], row[4], round(row[5],4), row[6], row[7]])
     return output.getvalue()
+
+
+# app.py
+import os
+from flask import Flask, render_template
+
+app = Flask(__name__, template_folder='templates', static_folder='static')
+
+@app.get("/")
+def index():
+    return render_template("index.html")
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))  # Railway te pone PORT
+    app.run(host="0.0.0.0", port=port)
